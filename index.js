@@ -38,17 +38,26 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
+// SETTING UP VIEWS
+const path = require("path");
+const ejsMate = require("ejs-mate");
+app.engine("ejs", ejsMate);
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
 
 
 
 
-
-
+// HOME
+app.get('/', (req, res) => {
+    res.send('explore');
+})
 
 // IMPORTING ROUTES
 const authRouter = require('./routes/auth');
 app.use('/user', authRouter);
+
 
 
 app.get('/', (req, res) => {
