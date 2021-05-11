@@ -37,6 +37,15 @@ passport.use(new localStrategy(User.authenticate()) );
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// FLASH MESSAGES
+const flash = require('connect-flash');
+app.use(flash());
+app.use((req, res, next) => {
+    res.locals.currentUser = req.user;
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
+    next();
+})
 
 // SETTING UP VIEWS
 const path = require("path");
@@ -51,18 +60,13 @@ app.set("views", path.join(__dirname, "views"));
 
 // HOME
 app.get('/', (req, res) => {
-    res.send('explore');
+    res.render('portfolios/explore');
 })
 
 // IMPORTING ROUTES
 const authRouter = require('./routes/auth');
 app.use('/user', authRouter);
 
-
-
-app.get('/', (req, res) => {
-    res.send('Welcome');
-})
 
 app.listen(3000, (req, res) => {
     console.log('Server started');

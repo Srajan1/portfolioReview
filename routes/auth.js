@@ -6,11 +6,16 @@ router.post('/register', async (req, res) => {
     try{
         const {username, email, password} = req.body;
         const {error} = registerValidation(req.body);
-        if(error) return res.status(401).send(error.details[0].message);
+        if(error){ req.flash('error', error.details[0].message); res.redirect('/');}
         else {
             const user = new User({username: username, email: email});
             const savedUser = await User.register(user, password);
-            res.send(savedUser);
+            req.login(savedUser, (err) => {
+                if(err){req.flash('error', error); res.redirect('/');}
+                req.flash('success', 'Welcome');
+                console.log(newUser);
+            })
+            
         }
     }catch(err){
         res.send(err.message);
