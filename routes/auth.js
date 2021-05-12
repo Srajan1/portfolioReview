@@ -1,8 +1,10 @@
 const router = require('express').Router();
 const passport = require('passport');
 const User = require('../models/User')
+const catchAsync = require('../utils/catchAsync');
+const ExpressError = require('../utils/expressError')
 const {registerValidation} = require('../validation');
-router.post('/register', async (req, res) => {
+router.post('/register', catchAsync(async (req, res) => {
     try{
         const {username, email, password} = req.body;
         const {error} = registerValidation(req.body);
@@ -18,9 +20,9 @@ router.post('/register', async (req, res) => {
             
         }
     }catch(err){
-        res.send(err.message);
+        throw new ExpressError(err.message, 400);
     }
-});
+}));
 
 router.get('/register', (req, res) => {
     res.render('auth/register');

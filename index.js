@@ -67,6 +67,13 @@ app.get('/', (req, res) => {
 const authRouter = require('./routes/auth');
 app.use('/user', authRouter);
 
+// ERROR HANDLER
+app.use((err, req, res, next) => {
+    const {statusCode = 500, message = 'Something went wrong'} = err;
+    if(!err.message) err.message = 'Something went wrong';
+    res.status(statusCode).render('error', {err});
+//   res.send("Something went wrong");
+});
 
 app.listen(3000, (req, res) => {
     console.log('Server started');
