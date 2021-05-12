@@ -32,9 +32,15 @@ router.get('/login', (req, res) => {
     res.render('auth/login');
 });
 
-router.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/user/login'}),async(req, res) => {
-    console.log('Logged in');
-    res.send('Logged in')
+router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/user/login'}),async(req, res) => {
+    req.flash('success', 'Welcome');
+    res.redirect('/');
 });
+
+router.get('/logout', (req, res) => {
+    req.logOut();
+    req.flash('success', 'Logged out');
+    res.redirect('/');
+})
 
 module.exports = router;

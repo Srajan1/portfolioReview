@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 
+const ExpressError = require('./utils/expressError')
+
 // CONNECTING TO DATABASE
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
@@ -66,6 +68,10 @@ app.get('/', (req, res) => {
 // IMPORTING ROUTES
 const authRouter = require('./routes/auth');
 app.use('/user', authRouter);
+
+app.all('*', (req, res, next) => {
+    next(new ExpressError('Page not found', 404));
+})
 
 // ERROR HANDLER
 app.use((err, req, res, next) => {
