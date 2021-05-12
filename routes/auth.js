@@ -4,6 +4,7 @@ const User = require('../models/User')
 const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/expressError')
 const {registerValidation} = require('../validation');
+const {isLoggedIn} = require('../middleware');
 router.post('/register', catchAsync(async (req, res) => {
     try{
         const {username, email, password} = req.body;
@@ -37,7 +38,7 @@ router.post('/login', passport.authenticate('local', { failureFlash: true, failu
     res.redirect('/');
 });
 
-router.get('/logout', (req, res) => {
+router.get('/logout', isLoggedIn, (req, res) => {
     req.logOut();
     req.flash('success', 'Logged out');
     res.redirect('/');

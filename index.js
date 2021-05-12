@@ -68,6 +68,8 @@ app.get('/', (req, res) => {
 // IMPORTING ROUTES
 const authRouter = require('./routes/auth');
 app.use('/user', authRouter);
+const portfolioRouter = require('./routes/portfolio');
+app.use('/portfolio', portfolioRouter);
 
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page not found', 404));
